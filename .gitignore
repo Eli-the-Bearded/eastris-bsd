@@ -1,2 +1,6 @@
 *.swp
 *.o
+src/eastris
+src/eastris.6
+src/pathnames.h
+src/tags

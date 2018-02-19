@@ -360,7 +360,7 @@ showscores(level)
 
 	if (!gotscores)
 		getscores((FILE **)NULL);
-	(void)printf("\n\t\t\t    Tetris High Scores\n");
+	(void)printf("\n\t\t\t    Eastris High Scores\n");
 
 	/*
 	 * If level == 0, the person has not played a game but just asked for

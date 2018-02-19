@@ -128,7 +128,6 @@ struct shape {
 };
 
 extern const struct shape shapes[];
-#define	randshape() (&shapes[random() % 7])
 
 extern const struct shape *curshape;
 extern const struct shape *nextshape;
@@ -144,7 +143,7 @@ extern const struct shape *nextshape;
  * but by then the game is utterly impossible.
  */
 extern long	fallrate;	/* less than 1 million; smaller => faster */
-#define	faster() (fallrate -= fallrate / 3000)
+#define	faster() (fallrate -= fallrate / 1000)
 
 /*
  * Game level must be between 1 and 9.  This controls the initial fall rate
@@ -152,6 +151,9 @@ extern long	fallrate;	/* less than 1 million; smaller => faster */
  */
 #define	MINLEVEL	1
 #define	MAXLEVEL	9
+
+#define STATUS_GROUP 	(30)
+#define STATUS_MAX 	(7*STATUS_GROUP)
 
 /*
  * Scoring is as follows:
@@ -164,6 +166,7 @@ extern long	fallrate;	/* less than 1 million; smaller => faster */
  * still be moved or rotated).
  */
 extern int	score;		/* the obvious thing */
+extern int	status;
 extern gid_t	gid, egid;
 
 extern char	key_msg[100];
@@ -172,3 +175,7 @@ extern int	showpreview;
 int	fits_in(const struct shape *, int);
 void	place(const struct shape *, int, int);
 void	stop(const char *) __attribute__((__noreturn__));
+
+#ifndef RANDOM_MAX
+#define RANDOM_MAX RAND_MAX
+#endif

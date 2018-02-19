@@ -393,6 +393,8 @@ scr_update()
 		else
 			moveto(0, 0);
 		(void) printf("Score: %d", score);
+		moveto(1, 0);
+		(void) printf("Status: %d - %d", status, (status / STATUS_GROUP));
 		curscore = score;
 	}
 

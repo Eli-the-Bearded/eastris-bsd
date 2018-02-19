@@ -52,3 +52,7 @@ void	scr_init(void);
 void	scr_msg(char *, int);
 void	scr_set(void);
 void	scr_update(void);
+
+#ifndef OXTABS
+#define OXTABS TAB3
+#endif

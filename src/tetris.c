@@ -36,8 +36,8 @@
 
 #include <sys/cdefs.h>
 #ifndef lint
-__COPYRIGHT("@(#) Copyright (c) 1992, 1993\n\
-	The Regents of the University of California.  All rights reserved.\n");
+char copyright_notice[] = "@(#) Copyright (c) 1992, 1993\n\
+        The Regents of the University of California.  All rights reserved.\n";
 #endif /* not lint */
 
 /*
@@ -59,6 +59,7 @@ __COPYRIGHT("@(#) Copyright (c) 1992, 1993\n\
 #include "screen.h"
 #include "tetris.h"
 
+
 cell	board[B_SIZE];		/* 1 => occupied, 0 => empty */
 
 int	Rows, Cols;		/* current screen size */
@@ -69,6 +70,7 @@ const struct shape *nextshape;
 long	fallrate;		/* less than 1 million; smaller => faster */
 
 int	score;			/* the obvious thing */
+int	status;
 gid_t	gid, egid;
 
 char	key_msg[100];
@@ -124,6 +126,19 @@ elide()
 	}
 }
 
+#define	ORIGrandshape() (&shapes[random() % 7])
+
+extern const struct shape *
+randshape()
+{
+	int rc = (status++ / STATUS_GROUP);
+	if(status > STATUS_MAX) { status = 0; }
+        if((RANDOM_MAX / 80) < random()) {
+          rc = (rc == 6)? 0 : rc + 1;
+        }
+	return(&shapes[rc]);
+}
+
 int
 main(argc, argv)
 	int argc;
@@ -131,7 +146,7 @@ main(argc, argv)
 {
 	int pos, c;
 	const char *keys;
-	int level = 2;
+	int level = 4;
 	char key_write[6][10];
 	int ch, i, j;
 	int fd;
@@ -146,8 +161,9 @@ main(argc, argv)
 	close(fd);
 
 	keys = "jkl pq";
+	status = 0;
 
-	while ((ch = getopt(argc, argv, "k:l:ps")) != -1)
+	while ((ch = getopt(argc, argv, "k:l:psS:")) != -1)
 		switch(ch) {
 		case 'k':
 			if (strlen(keys = optarg) != 6)
@@ -166,6 +182,13 @@ main(argc, argv)
 		case 's':
 			showscores(0);
 			exit(0);
+		case 'S':
+			status = atoi(optarg);
+			if (status < 0 || status > STATUS_MAX) {
+				errx(1, "status must be from %d to %d",
+				     0, STATUS_MAX);
+			}
+			break;
 		case '?':
 		default:
 			usage();
@@ -275,7 +298,7 @@ main(argc, argv)
 			continue;
 		}
 		if (c == keys[1]) {
-			/* turn */
+			/* rotate / turn */
 			const struct shape *new = &shapes[curshape->rot];
 
 			if (fits_in(new, pos))
@@ -332,6 +355,7 @@ onintr(signo)
 void
 usage()
 {
-	(void)fprintf(stderr, "usage: tetris-bsd [-ps] [-k keys] [-l level]\n");
+	(void)fprintf(stderr, "usage: eastris [-ps] [-k keys] [-l level] [-S status]\n");
+	(void)fprintf(stderr, "Keys are in order: left, rotate, right, drop, pause, quit\n");
 	exit(1);
 }

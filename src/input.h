@@ -37,3 +37,7 @@
 int	rwait(struct timeval *);
 int	tgetchar(void);
 void	tsleep(void);
+
+#ifndef INFTIM
+#define INFTIM (-1)
+#endif

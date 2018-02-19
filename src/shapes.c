@@ -53,6 +53,17 @@
 #define	BR	B_COLS+1	/* bottom right */
 
 const struct shape shapes[] = {
+/*
+ *	X.X	  X.X		X.X
+ *	  X.X	X.X	X.X.X	X.X	X.X.X	X.X.X	X.X.X.X
+ *			  X		X	    X
+ *
+ *	  0	  1	  2	  3	  4	  5	  6
+ * rotates to:
+ *        7       8       9       -      12      15      18
+ *        -       -      10       -      13      16       -
+ *        -       -      11       -      14      17       -
+ */
 	/* 0*/	{ 7,	{ TL, TC, MR, } },
 	/* 1*/	{ 8,	{ TC, TR, ML, } },
 	/* 2*/	{ 9,	{ ML, MR, BC, } },
